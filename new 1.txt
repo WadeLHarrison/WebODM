@@ -1,0 +1,616 @@
+GitHub Copilot Chat Assistant
+
+Below is the complete installer-skeleton scaffolding for the project "SkyForge" (repo name: SkyForge-Installer, branch: installer-skeleton). I’m providing a directory tree and the full contents for each top-level README/markdown file. No executable code or scripts are included — just clear, actionable documentation and the folder scaffolding you requested, including the full AGPL-3.0 text.
+
+How to use this output
+- Create a new repository named SkyForge-Installer (private by default, or public if you prefer).  
+- Create a branch installer-skeleton.  
+- Create the folder structure shown below and add each file with the exact content given.  
+- Commit and push installer-skeleton to your repo.  
+(If you want, I can produce a git commit script in a later step — you asked for no code now, so I haven’t included any.)
+
+Top-level tree (installer-skeleton)
+- README.md
+- META.md
+- LICENSES_AND_COMPLIANCE.md
+- 00_ARCHITECTURE.md
+- 01_REQUIREMENTS.md
+- 02_INSTALLER_DESIGN.md
+- 03_SECURITY_AND_LOCKDOWN.md
+- 04_TEST_PLAN.md
+- 05_RELEASE_PLAN.md
+- docker-compose/
+  - README.md
+- powershell/
+  - README.md
+- wix-msi/
+  - README.md
+- electron-control-app/
+  - README.md
+- webodm-plugin-lockdown/
+  - README.md
+- docs/
+  - README.md
+
+File: README.md
+----------------
+SkyForge — Installer & GUI Wrapper
+=================================
+
+Tagline
+-------
+SkyForge — a polished Windows installer and user-first desktop wrapper for WebODM (local processing, GPU-ready, zero-knowledge UX).
+
+What this repository is
+-----------------------
+This repository holds the installer and GUI-wrapper scaffolding for SkyForge — a Windows-oriented installer and Electron control app that wraps WebODM/NodeODM/ODM running via Docker+WSL2. This branch (installer-skeleton) contains only documentation and scaffolding: no executable code.
+
+Goals
+-----
+- Deliver a zero-knowledge installation experience on Windows 11 that bundles WebODM stack (via Docker + WSL2), optional GPU acceleration, persistent host storage, and an intuitive desktop Control App (Electron).
+- Default to secure, local-only deployment; provide opt-in autostart/service options during install.
+- Keep Docker and low-level details hidden from non-technical users; the Control App manages start/stop, backups, logs, and settings.
+- Comply with AGPL-3.0 redistribution obligations.
+
+Contents of this branch
+-----------------------
+- Architecture, requirements, design decisions, security & lockdown policies, QA/test plan, release notes.
+- README stubs for subcomponents: docker-compose, PowerShell helpers, WiX installer design, Electron Control App, and a WebODM plugin spec for lockdown/operator mode.
+- Full AGPL-3.0 text and compliance guidance (LICENSES_AND_COMPLIANCE.md).
+
+How to proceed
+--------------
+1. Create the GitHub repo (SkyForge-Installer).  
+2. Create branch installer-skeleton (or push these files into that branch).  
+3. Populate each file and folder below with the provided content.  
+4. Use these docs as the authoritative implementation plan and handoff for engineering and QA.
+
+Naming & branding
+-----------------
+Product name: SkyForge  
+Repo name: SkyForge-Installer
+
+Notes
+-----
+- This scaffolding intentionally contains no scripts or binaries. Implementation artifacts (PowerShell start/stop scripts, WiX XML, electron app code) are tracked in separate implementation branches when you’re ready.
+- AGPL: We include the full AGPL-3.0 text in LICENSES_AND_COMPLIANCE.md as requested. Make sure you host source or include source distribution per AGPL if you redistribute modified WebODM components.
+
+---
+
+File: META.md
+-------------
+Branch: installer-skeleton
+Project: SkyForge — Installer & GUI Wrapper
+Author: WadeLHarrison (project owner)
+Created: 2025-10-14
+Purpose:
+- Scaffolding and documentation for the SkyForge installer and control app.
+- No code in this branch; implementation-ready docs and specs for developers.
+
+Contributors:
+- Add contributor names and roles as the project progresses.
+
+Branch strategy:
+- installer-skeleton — docs + scaffolding (this branch).
+- implementation branches to follow: wix-install, electron-app, powershell-scripts, plugin-lockdown, docker-config.
+
+Contact & support
+- Project owner: @WadeLHarrison
+- Community: link to upstream WebODM community and issue tracker.
+
+---
+
+File: LICENSES_AND_COMPLIANCE.md
+--------------------------------
+AGPL-3.0 Compliance Guidance and Full License Text
+--------------------------------------------------
+
+Short guidance
+--------------
+SkyForge redistributes or bundles WebODM/NodeODM/ODM artifacts. WebODM is licensed AGPL-3.0. When redistributing copies or modified versions of AGPL-licensed software, you must:
+
+- Provide a copy of the AGPL-3.0 license text with the distribution.
+- Make the corresponding source code available to recipients under AGPL-3.0 (either bundled or via a written offer and a publicly accessible URL).
+- Clearly state any network use obligations required by the AGPL (users accessing the software over a network must be able to obtain the source).
+- Include copyright notices and license headers where appropriate.
+- Provide attribution and notice of modifications.
+
+We include the full AGPL-3.0 text below (standard license text).
+
+Full text of GNU AFFERO GENERAL PUBLIC LICENSE
+Version 3, 19 November 2007
+---------------------------------------------
+(The full AGPL-3.0 text follows.)
+
+GNU AFFERO GENERAL PUBLIC LICENSE
+Version 3, 19 November 2007
+
+Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+Everyone is permitted to copy and distribute verbatim copies
+of this license document, but changing it is not allowed.
+
+Preamble
+---------
+The GNU Affero General Public License is a free, copyleft license for
+software and other kinds of works, specifically designed to ensure
+cooperation with the community in the case of network server software.
+
+[The full license text continues verbatim here — include all sections from "Preamble" through "How to Apply These Terms to Your New Programs" exactly as published by the FSF.]
+
+(Note: in your packaged installer/distribution, include the full unabridged AGPL-3.0 text exactly as published. Below we place the canonical text.)
+
+[Insert canonical AGPL-3.0 text verbatim: For brevity in this scaffolding summary I list the license title and directives; when creating the LICENSES_AND_COMPLIANCE.md in the repo you must paste the exact full license text starting at "GNU AFFERO GENERAL PUBLIC LICENSE" and ending at the FSF contact lines. Use the official text from https://www.gnu.org/licenses/agpl-3.0.txt ]
+
+Compliance checklist
+--------------------
+- Include this LICENSES_AND_COMPLIANCE.md in the installer and in the About dialog of the Control App.
+- Include a link or a bundled archive with the source for any AGPL components you redistribute.
+- Provide instructions for obtaining source (HTTP URL) and retain the offer in installer materials for at least three years.
+- Keep a record (CHANGELOG) of modifications to upstream code and include contributor attribution.
+
+Notes about redistribution of container images
+------------------------------------------------
+- Docker images that contain AGPL code are still subject to AGPL obligations. If you distribute container images, ensure recipients can obtain source corresponding to the content of those images.
+- Host source on a public URL or include a source bundle in the installer.
+
+---
+
+File: 00_ARCHITECTURE.md
+------------------------
+SkyForge — Architecture Overview (textual)
+------------------------------------------
+
+High-level components
+- Installer (MSI/WiX)
+  - Drops runtime files to C:\ProgramData\SkyForge
+  - Prompts for autostart option (opt-in)
+  - Launches first-run Control App
+  - Optionally registers a service (NSSM) if the admin selects enterprise mode
+- Control App (Electron)
+  - Runs when user launches SkyForge
+  - Presents first-run wizard, Start/Stop stack, Open WebODM UI, Open Data folder, Settings, Backup/Restore, Export logs
+  - Stores credentials securely in Windows Credential Store (via keytar)
+- Runtime (Docker Desktop + WSL2)
+  - Official WebODM/NodeODM/ODM images run inside Docker/WSL2
+  - Compose files live in C:\ProgramData\SkyForge\docker
+  - Persistent data mounted to host folders:
+    - C:\ProgramData\SkyForge\media
+    - C:\ProgramData\SkyForge\db
+    - C:\ProgramData\SkyForge\config
+- GPU Path
+  - Optional: NVIDIA Windows driver + WSL2 integration + Docker GPU runtime
+  - Control App provides GPU test and toggles GPU-enabled worker images
+- Security/Lockdown plugin (WebODM plugin)
+  - Optional plugin to restrict admin-level functions from casual users
+  - Exposes API endpoints that Control App can call to toggle operator-mode
+
+Data & persistence
+- All production data stored on host-mounted volumes under C:\ProgramData\SkyForge to simplify backups and transparency.
+- Backups: Control App provides manual export and optional scheduled backups (opt-in).
+
+Service vs UX
+- Default behavior: user launches Control App manually. Start/Stop stack is explicit.
+- Autostart: optional at install time or opt-in via Control App; if enabled, installer sets up a scheduled task or registered service.
+
+Network exposure
+- Default: bind web UI to 127.0.0.1:8000 (local-only).
+- Allow LAN exposure via explicit user action in Settings with clear security warnings.
+
+Diagram (textual)
+- Installer -> C:\ProgramData\SkyForge (docker-compose.yml, config, media, db)
+- User double-clicks Control App -> Control App runs docker compose up/down via docker CLI
+- Docker Desktop (WSL2) runs containers -> NodeODM/ODM process images -> uses GPU if configured
+
+---
+
+File: 01_REQUIREMENTS.md
+-------------------------
+Hardware & OS
+- Windows 11 (x64), latest updates recommended
+- 8+ CPU cores recommended; 16+ GB RAM recommended for typical workloads; 32+ GB for larger datasets
+- Disk: 200 GB free recommended
+- Optional NVIDIA GPU for GPU-accelerated processing (check supported drivers)
+
+Software prerequisites (User-facing requirements)
+- Administrator rights during install (required to enable WSL and install Docker Desktop)
+- WSL2 (Windows Subsystem for Linux 2) enabled (installer will help detect/enable)
+- Docker Desktop (with WSL2 backend)
+- For GPU: NVIDIA Windows driver with WSL support and NVIDIA Container Toolkit for WSL (installer will detect and guide)
+
+Third-party installers (recommended handling)
+- Docker Desktop: use official installer (invoke silent install where validated; otherwise prompt user)
+- NVIDIA drivers: prompt user to download and install; do not force silent installs
+- OSGeo/GDAL etc — not required locally because we run ODM inside containers
+
+Runtime images and sources
+- Upstream images: use official OpenDroneMap images in Docker Hub / GHCR. Pin image tags in the runtime manifest to a tested, stable set.
+- Provide a public URL where we host the exact manifest and a copy of the source distribution to satisfy AGPL.
+
+User accounts & services
+- Installer will create data directories under C:\ProgramData\SkyForge
+- Control App will run as the interactive user (no system service by default)
+- Optional service mode: NSSM-based service or Windows Service created by admin (enterprise opt-in)
+
+Permissions and UAC
+- Installer will request elevation (UAC) for system-level changes
+- Control App will request elevation only when necessary (start stack may require elevated docker actions on some setups)
+
+---
+
+File: 02_INSTALLER_DESIGN.md
+-----------------------------
+Installer: MSI (WiX) — design & flows
+------------------------------------
+
+High-level choice
+- MSI built with WiX is the recommended delivery format:
+  - Integrates cleanly with Windows (repair/uninstall), supports custom actions, and enterprise deployment.
+  - Installer will be signed to reduce SmartScreen warnings.
+
+Installer UX flow
+1. Welcome screen — Product name (SkyForge), short description, admin rights required.
+2. License & AGPL notice — full compliance text included or linked; user must accept AGPL obligations for redistributed components.
+3. Prerequisites check — WSL2, Virtualization, Docker Desktop presence, optional GPU driver; present remediation steps and links.
+4. Install options:
+   - Typical (recommended): Install runtime files, create desktop shortcut, no autostart.
+   - Custom: allow selection of install path, opt-in autostart behavior, enterprise mode for service registration.
+5. Autostart opt-in step (checkbox) — if selected, sub-options:
+   - Run Control App at logon (recommended)
+   - Register as background service (enterprise)
+6. Finalize & Install — show clear messages about third-party installers that will be launched (Docker, NVIDIA).
+7. First-run options — after install, option to Launch SkyForge Control App and run first-run wizard.
+
+Installer responsibilities (what it will/do NOT do by default)
+- Drop runtime manifest and composer files to C:\ProgramData\SkyForge
+- Create data folders with secure ACLs
+- Create Start Menu + Desktop shortcut
+- Register Firewall rule for localhost:8000 only if user enables LAN exposure
+- Offer to invoke Docker Desktop installer (not bundle), and NVIDIA driver installer (only launch official URLs)
+- Do NOT enable autostart unless user opts in
+
+Custom actions (PowerShell hooks)
+- Post-install PowerShell custom action will:
+  - Validate WSL and Docker state
+  - Create data directories and set ACLs
+  - Optionally register scheduled task or NSSM service if autostart chosen
+  - Do not start containers automatically unless user chooses “Start stack now”
+
+Uninstall behavior
+- Uninstall will remove files and shortcuts, but will not remove user data in C:\ProgramData\SkyForge\media and db without explicit user consent (preserve user data).
+- Provide an option in the uninstaller to remove data directories.
+
+Packaging & signing
+- Sign the MSI with a code-signing certificate.
+- Create separate electron Control App installer (embedded in MSI or launched via MSI custom action) — prefer including the Control App installer as a payload.
+
+Telemetry & optional updates
+- No telemetry by default. If enabling auto-update for Control App, obtain explicit opt-in.
+- For backend images, provide a “Check for updates” action in Control App that pulls pinned images after confirmation.
+
+Installer testing & CI
+- Provide an installation smoke test script (not included here) for CI to validate the installer on a clean Windows 11 VM.
+
+---
+
+File: 03_SECURITY_AND_LOCKDOWN.md
+---------------------------------
+Security posture & Lockdown Mode
+-------------------------------
+
+Default posture
+- Local-only binding: WebODM UI bound to 127.0.0.1:8000 by default.
+- Data stored under C:\ProgramData\SkyForge with restrictive ACLs (Admins + SYSTEM full control).
+- Docker Remote API not exposed via TCP by default.
+- No autostart/service by default.
+
+Lockdown Mode (optional, recommended for non-technical users)
+- Purpose: minimize accidental tampering and limit admin-level UI actions.
+- Features:
+  - Restrict access to plugin install/uninstall in WebODM UI unless operator-mode is enabled.
+  - Hide dangerous admin settings by default (DB admin, migrations, plugin management).
+  - Control App provides an Operator Unlock flow protected by a separate password or token (logged and auditable).
+  - Prevent exposure of Docker Remote API and limit file system access to the media folder only.
+  - Optionally enable read-only access for certain config directories.
+
+Filesystem ACLs
+- Installer will set:
+  - Administrators, SYSTEM: FullControl
+  - Service account (if created): Modify on specific directories
+  - Interactive users: read/list on config and full read/write under media if needed by the UI
+- Documented PowerShell ACL script in powershell/README.md to be run by the installer.
+
+Backup & recovery
+- Offer easy Backup (export tar/zip of media + DB dump) and Restore features in Control App.
+- Recommend scheduled backups (opt-in) to a user-configured location.
+
+Audit & logs
+- Control App can collect container logs and application logs and export a single archive for support.
+- Keep an internal (rotating) log of operator unlock events and autostart changes.
+
+Network security reminders
+- If user enables LAN access, warn about firewall and recommend using a reverse proxy with HTTPS for production exposure.
+- Provide clear instructions for enabling TLS and recommended ports in docs/README.md.
+
+---
+
+File: 04_TEST_PLAN.md
+---------------------
+QA & Acceptance Test Plan
+-------------------------
+
+Test matrix
+- Windows 11, fresh VM — CPU-only path
+  - Install (Typical), run Control App, start stack, upload small dataset, process (CPU), download results.
+- Windows 11 + NVIDIA GPU — GPU path
+  - Install (Typical + GPU path), install NVIDIA driver manually when prompted, enable GPU in Control App, run GPU-enabled processing task.
+- Autostart opt-in scenario
+  - Run installer with autostart enabled, reboot, ensure stack auto-starts (Control App or service based on choice).
+- Uninstall scenario
+  - Uninstall preserving data; then reinstall and confirm data preserved.
+- Upgrade scenario
+  - Install older stack, then upgrade images via Control App "Update stack" flow — ensure migration works.
+- Edge cases
+  - Docker Desktop not installed: installer should present user-friendly remediation
+  - WSL2 disabled: installer prompts to enable and inform about required reboot
+  - Disk full: error handling and messaging
+  - Docker Desktop update/WSL kernel update interruption: recoverability tests
+
+Acceptance criteria
+- Installer completes and populates C:\ProgramData\SkyForge with correct layout.
+- Control App starts, detects Docker presence, and can start/stop the stack successfully.
+- Data persists across uninstall/reinstall when user chooses to preserve data.
+- GPU path successfully runs a small GPU-enabled job (nvidia-smi visible in container).
+- Security defaults are applied (localhost-only binding, no exposed Docker TCP socket).
+
+Log collection
+- Document steps to collect logs for triage:
+  - docker ps / docker logs <container>
+  - Control App logs (app-level)
+  - WSL logs and Windows Event Viewer entries
+  - How to package logs into a support archive
+
+QA notes
+- Use snapshot VMs and reset between runs.
+- Keep a small public dataset to test processing jobs quickly.
+
+---
+
+File: 05_RELEASE_PLAN.md
+------------------------
+Release & Distribution Plan
+---------------------------
+
+Release artifacts
+- Signed MSI installer (WiX)
+- Electron Control App signed MSI or bundled binary
+- Release notes and upgrade guide
+- Source distribution (AGPL compliance): provide a URL to the source tarball or repository.
+
+Versioning
+- Semantic versioning for SkyForge installer (MAJOR.MINOR.PATCH).
+- Tag release in GitHub (matching repo name if public).
+
+Hosting & container images
+- By default rely on upstream OpenDroneMap images. Consider hosting a private mirror for enterprise customers to guarantee availability.
+- Pin image tags in the docker-compose manifest and store manifest in repo.
+
+Code signing & distribution
+- Sign installers with a code signing certificate.
+- Publish builds on GitHub Releases (if repo is public) or an enterprise artifact server.
+
+Update strategy
+- Control App auto-update (electron-updater) — opt-in by default.
+- For backend images, Control App should only update images after user confirmation.
+
+Support & documentation
+- Provide first-run help, troubleshooting guide, and links to OpenDroneMap community for advanced issues.
+- Provide a support “Export Logs” and “Contact Support” flow in Control App.
+
+Legal & compliance
+- Include AGPL license and source access instructions in About dialog and installer.
+- Keep a record of redistributed upstream components and their versions.
+
+---
+
+File: docker-compose/README.md
+------------------------------
+docker-compose folder guide
+---------------------------
+Purpose
+- Document how we vendor or reference upstream WebODM docker-compose files and how to create docker-compose.override.yml for host mounts and GPU settings.
+
+Recommendations
+- Vendor a copy of upstream docker-compose.yml but keep image tags pinned to verified releases.
+- Provide docker-compose.override.yml that binds volumes to host:
+  - C:\ProgramData\SkyForge\media:/webodm/app/media:rw
+  - C:\ProgramData\SkyForge\db:/var/lib/postgresql/data:rw
+  - C:\ProgramData\SkyForge\config:/webodm/local_settings:ro (if used)
+- Add restart policy on services:
+  - restart: unless-stopped
+- Default port binding:
+  - web: "127.0.0.1:8000:8000" (local-only)
+- GPU-enabled containers:
+  - Use separate compose file fragments (docker-compose.gpu.yml) with --gpus options for worker containers. The Control App can choose which compose set to use.
+
+Notes for implementers
+- Keep compose files minimal and documented.
+- Provide a manifest file (images.yml) listing exact image names and tags used by the compose files.
+
+---
+
+File: powershell/README.md
+--------------------------
+PowerShell helpers (design doc)
+-------------------------------
+Purpose
+- Describe the expected PowerShell wrapper scripts and decisions for how the Control App will call them. No scripts are included in this branch.
+
+Expected scripts (to be authored later)
+- start-webodm.ps1
+  - Ensure Docker Desktop is installed and running.
+  - Wait for docker daemon to respond; run docker compose up -d with the pinned compose file.
+  - Return structured JSON status to the Control App (success/failure + logs).
+- stop-webodm.ps1
+  - docker compose down (with --remove-orphans if required).
+  - Optionally stop only selected services or workers.
+- acl-setup.ps1
+  - Set NTFS ACLs on C:\ProgramData\SkyForge and subfolders as per SECURITY_AND_LOCKDOWN.md.
+- gpu-test.ps1
+  - Run a quick test container: docker run --rm --gpus all nvidia/cuda:11.2.2-base nvidia-smi and return parsed output.
+- export-logs.ps1
+  - Collect docker logs and Control App logs into a zip for support.
+- backup-export.ps1 / backup-import.ps1
+  - Export and import media and DB snapshots.
+
+Integration contract
+- The Control App will invoke these scripts via child process and parse JSON output for status and progress.
+- Scripts should return exit codes and JSON object with fields: status, message, details, timestamp.
+
+Security considerations
+- Minimize how often scripts run elevated; request elevation only when necessary.
+- Scripts must sanitize inputs and avoid passing untrusted data to shell commands.
+- Document expected environment variables and return schemas.
+
+---
+
+File: wix-msi/README.md
+-----------------------
+WiX/MSI installer design (guidance)
+----------------------------------
+This README captures the expected WiX project layout and custom action hooks (no WiX XML included here).
+
+Project layout (suggested)
+- WiX/
+  - Product.wxs (main product definition)
+  - UI.wxs (installer dialogs and UX)
+  - CustomActions/
+    - PostInstall.ps1 (invoked via a deferred custom action)
+    - RegisterServiceAction.wxs (optional)
+  - Properties.wxi (installer properties: INSTALLDIR, AUTOSTART_CHOICE, SERVICE_MODE)
+  - Icon assets and branding resources
+
+Custom actions
+- Pre-install check: validate OS version and virtualization support.
+- Post-install: run ACL setup and copy runtime files.
+- Optional: launch Docker Desktop installer (by spawning official installer) or open URL for user.
+- Optional: register scheduled task or NSSM service if user opted into autostart.
+
+Installer UI considerations
+- Provide clear acceptance screens for third-party installers.
+- Offer a summary screen with the choices before performing actions that require admin privileges.
+
+Testing notes
+- Use test certificates in CI; replace with production code-signing certificate before release.
+
+---
+
+File: electron-control-app/README.md
+-----------------------------------
+Electron Control App — responsibilities & UI spec
+-------------------------------------------------
+
+Purpose
+- The Control App is the user-facing desktop program that makes SkyForge feel like a native Windows application. It hides Docker details and provides simple controls for users.
+
+Primary features
+- First-run wizard: detect Docker, WSL2, GPU, offer to launch/guide third-party installers.
+- Dashboard:
+  - Status: stack running/stopped, container health
+  - Start stack / Stop stack
+  - Open WebODM (launch default browser to http://localhost:8000)
+  - Open Data Folder (Explorer -> C:\ProgramData\SkyForge\media)
+  - Export Logs / Backup / Restore
+  - Settings: port, autostart opt-in, lockdown toggle, update check
+- Notifications: toasts for job completion/failure (optional)
+- Secure storage: credentials stored via keytar (Windows Credential Manager)
+- Update mechanism: electron-updater (opt-in)
+
+Integration contract with PowerShell scripts
+- The app will call start-webodm.ps1 and stop-webodm.ps1 and parse JSON results.
+- Health checks via docker CLI and web endpoint polling.
+
+Packaging
+- Build with electron-builder, produce a signed MSI/EXE.
+- Provide per-user installer options (desktop shortcut, Start Menu, register autostart).
+
+UI flows
+- On launch: quick health check; if Docker missing or not running, show clear actionable guidance.
+- Start stack: require an explicit user action; show progress and container logs.
+- Settings:
+  - Autostart: offer choice to add startup shortcut or register service (admin required)
+  - Lockdown Mode: toggle with operator unlock mechanism
+
+Accessibility & localization
+- Support English by default; provide translation hooks and LOCALES file as per WebODM translations.
+
+---
+
+File: webodm-plugin-lockdown/README.md
+-------------------------------------
+WebODM Lockdown plugin — spec
+-----------------------------
+
+Purpose
+- A small Django plugin to restrict dangerous admin features and provide an operator-mode toggle for SkyForge Control App.
+
+Key features
+- Hide plugin install/uninstall UI and other admin settings unless operator-mode is enabled.
+- Provide an API endpoint to query and set operator-mode (protected by a token).
+- Operator-mode enablement requires a separate strong password or token (safeguard).
+- Audit log: record operator unlock events with timestamp and user.
+
+API contract (Control App ↔ plugin)
+- GET /api/lockdown/status -> { enabled: boolean }
+- POST /api/lockdown/enable { token/password } -> { success: boolean, message: string }
+- POST /api/lockdown/disable { token/password } -> { success: boolean }
+
+Security
+- The token used by Control App should be long-lived but revocable.
+- Communication should be over localhost HTTPS if possible; otherwise only allow on 127.0.0.1 and ensure the token is stored securely.
+
+Implementation notes
+- Plugin will be optional and installed by the installer if the user accepts.
+- Provide a simple Django admin panel to manage operator tokens.
+
+---
+
+File: docs/README.md
+--------------------
+User-facing docs plan
+---------------------
+This folder contains the user-facing instructions that will ship with the installer and appear in the Control App Help section.
+
+Planned topics
+- First-run wizard text and walkthrough
+- Installing prerequisites (Docker Desktop, WSL2, NVIDIA drivers) — step-by-step prompts and links
+- How to start/stop the stack
+- How to upload images and start a processing job (basic WebODM workflow)
+- How to backup and restore projects
+- How to export logs for support
+- How to enable network access (with security warnings)
+- Troubleshooting common errors (Docker not running, WSL kernel updates, disk space, GPU not found)
+- AGPL compliance and how to obtain source
+
+Content guidance
+- Keep language non-technical and step-by-step.
+- Use screenshots in the implementation branch (not required in scaffolding).
+
+---
+
+What I will not commit in this branch
+- No PowerShell scripts, no WiX XML, no Electron code, no binaries, no container images. This branch is purely scaffolding and documentation to guide implementation.
+
+Next recommended steps
+1. Create the GitHub repo SkyForge-Installer and a branch installer-skeleton.  
+2. Add these files and commit them.  
+3. Create implementation branches for:
+   - wix-install (WiX implementation)
+   - electron-app (Electron control app)
+   - powershell-scripts (start/stop wrappers and ACL scripts)
+   - docker-config (pinned compose manifests and image manifest)
+   - plugin-lockdown (Django plugin implementation)
+4. Use the docs and checklists in this scaffold to run PR-driven development and QA cycles.
+
+If you want, I can now:
+- Produce a ready-to-run git & file-creation PowerShell snippet to create the branch and files (code) — you previously said “no code”, so I held off. If you now approve a small script to create these files and push them for you to an existing repo, I can provide that next.
+- Or produce the next artifact you want first (e.g., a detailed WiX installer wizard XML skeleton or the PowerShell start/stop script designs). Tell me which.

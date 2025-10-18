@@ -1,239 +1,202 @@
-# WebODM Desktop
+# SkyForge — Build and Delivery Specification
 
-A desktop application wrapper for WebODM that provides a user-friendly interface for drone image processing while maintaining AGPL compliance through proper component separation.
+**Purpose:**  
+SkyForge is a Windows-first, GPU-ready, zero-knowledge desktop wrapper for WebODM.  
+This document defines *what* must be built, *how* it should behave, and *what constitutes a complete deliverable*.  
+Audience: Human (Supervisor) + Claude-Code (Builder) operating inside Cursor IDE.
 
-## Features
+---
 
-- **Desktop Interface**: Native desktop application built with Electron and React
-- **Docker Integration**: Automatic management of WebODM and NodeODM containers
-- **Task Management**: Create, monitor, and manage processing tasks
-- **Reliability**: Built-in retry logic, fault tolerance, and error recovery
-- **File Support**: Comprehensive image format validation and processing
-- **Progress Tracking**: Real-time monitoring of processing status
-- **Cross-Platform**: Works on Windows, macOS, and Linux
+## 1. Product Definition
 
-## Architecture
+**Goal:**  
+Deliver a signed Windows installer that installs and configures the entire WebODM stack with minimal user interaction.
 
-The application maintains AGPL compliance by treating WebODM and NodeODM as isolated services:
+**Core Outcomes**
+- Single MSI installer (WiX-based) that sets up SkyForge under `C:\ProgramData\SkyForge`
+- Electron-based Control App that hides all Docker/WSL2 complexity
+- Secure, local-only default runtime with optional GPU acceleration
+- Compliance with AGPL-3.0 redistribution rules
 
-- **Desktop App**: Custom UI (can be proprietary)
-- **WebODM Backend**: Running in Docker, accessed via REST API
-- **NodeODM Processing**: Isolated in Docker container(s)
-- **Communication**: REST API only (maintains license separation)
+**User Experience Priorities**
+1. Zero-knowledge setup (no Docker or CLI exposure)
+2. Clear start/stop controls and live status feedback
+3. Persistent data and simple backup/restore
+4. Optional autostart and LAN exposure, both opt-in
+5. Professional polish (signed binaries, Windows integration)
 
-## Prerequisites
+---
 
-- Node.js 16+ and npm
-- Docker and Docker Compose
-- Git
+## 2. System Architecture
 
-## Installation
+### High-Level Components
 
-1. **Clone the repository**:
-   ```bash
-   git clone <repository-url>
-   cd desktop-app
-   ```
+| Component | Purpose | Location / Notes |
+|------------|----------|------------------|
+| **Installer (MSI/WiX)** | Deploy runtime files and Control App | `C:\ProgramData\SkyForge` |
+| **Control App (Electron)** | User-facing GUI managing Docker stack | Uses `docker` CLI + PowerShell scripts |
+| **Runtime (Docker Desktop + WSL2)** | Runs WebODM, NodeODM, and ODM containers | Compose manifests under `docker/` |
+| **GPU Path (Optional)** | Enables GPU processing via NVIDIA + WSL2 | Controlled in Settings |
+| **Security Plugin (Lockdown)** | Optional WebODM plugin restricting admin features | API callable from Control App |
 
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+### Runtime Flow
+1. User launches Control App  
+2. Control App verifies Docker/WSL2 health  
+3. `docker compose up` launches WebODM/NodeODM stack  
+4. Control App polls REST endpoints for health/status  
+5. User accesses WebODM UI via default browser  
+6. Data persists under host folders for transparency  
 
-3. **Build the application**:
-   ```bash
-   npm run build
-   ```
+### File Structure (Target State)
+C:\ProgramData\SkyForge
+├── docker
+│ ├── docker-compose.yml
+│ ├── config
+│ ├── media
+│ └── db
+├── ControlApp
+├── logs
+└── backups\
 
-4. **Start the application**:
-   ```bash
-   npm start
-   ```
 
-## Development
+---
 
-### Development Mode
+## 3. Installation and Runtime Specification
 
-```bash
-# Start development server
-npm run dev
+### Installer Responsibilities
+- Drop runtime and manifest files to `C:\ProgramData\SkyForge`
+- Create data folders with secure ACLs
+- Add Start Menu + desktop shortcuts
+- Register firewall rule (localhost only)
+- Offer autostart options:
+  - Launch Control App at logon  
+  - Register Windows service (enterprise mode)
+- Trigger PowerShell post-install script:
+  - Validate WSL2 + Docker
+  - Create directories
+  - Optionally start stack
 
-# Build for production
-npm run build
+### Prerequisite Checks
+- WSL2 enabled  
+- Docker Desktop installed and running  
+- (Optional) NVIDIA GPU driver and WSL integration  
 
-# Package for distribution
-npm run pack
-```
+### Runtime Defaults
+- Bind WebODM to `127.0.0.1:8000`
+- Data and logs stored in `C:\ProgramData\SkyForge`
+- Autostart disabled unless chosen
+- No telemetry  
+- Updates: opt-in only
 
-### Project Structure
+---
 
-```
-desktop-app/
-├── src/
-│   ├── main/                 # Electron main process
-│   │   └── index.ts
-│   ├── renderer/             # React UI
-│   │   ├── components/       # React components
-│   │   ├── App.tsx
-│   │   └── index.tsx
-│   ├── services/             # Business logic
-│   │   ├── DockerManager.ts
-│   │   ├── WebODMClient.ts
-│   │   ├── ProcessingManager.ts
-│   │   ├── TaskQueue.ts
-│   │   └── FileHandler.ts
-│   └── utils/                # Utilities
-│       └── Logger.ts
-├── package.json
-├── webpack.main.config.js
-├── webpack.renderer.config.js
-└── docker-compose.yml
-```
+## 4. Control App Functional Specification
 
-## Usage
+### Core Responsibilities
+1. **System Detection:** Verify WSL2, Docker, GPU status.  
+2. **Stack Control:** Start/stop WebODM containers via PowerShell scripts.  
+3. **Dashboard:** Display health indicators and logs.  
+4. **Access Shortcuts:**  
+   - Open WebODM (`http://localhost:8000`)  
+   - Open Data Folder  
+5. **Backup / Restore:** Manual and optional scheduled backups.  
+6. **Settings Panel:**  
+   - Port configuration  
+   - Autostart toggles  
+   - Lockdown plugin control  
+   - GPU enablement  
+   - Update check  
+7. **Notifications:** Toasts for job completion/failure.  
+8. **Security:** Store credentials via Windows Credential Manager (keytar).  
 
-### Starting the Application
+### Integration with PowerShell
+- `start-webodm.ps1` → start containers and return JSON status  
+- `stop-webodm.ps1` → stop containers gracefully  
+- Health polling → REST + `docker ps`  
 
-1. Launch the desktop application
-2. The app will automatically start Docker containers for WebODM and NodeODM
-3. Wait for the containers to be healthy (status indicators in the status bar)
+### UI Rules
+- No CLI exposure  
+- Explicit Start/Stop actions only  
+- Clear visual feedback (status: Running / Stopped / Error)  
 
-### Creating a Project
+---
 
-1. Go to the "Projects" tab
-2. Click "New Project"
-3. Enter project name and description
-4. Click "Create"
+## 5. Compliance and Licensing Requirements
 
-### Processing Images
+SkyForge redistributes WebODM/NodeODM/ODM (AGPL-3.0).  
+Mandatory obligations:
 
-1. Go to the "Create Task" tab
-2. Select a project
-3. Enter task name
-4. Select image files (drag & drop or file picker)
-5. Configure processing options
-6. Click "Create Task"
+1. Include full AGPL-3.0 license text in installer and About dialog.  
+2. Provide access to corresponding source (URL or bundled archive).  
+3. Maintain attribution and copyright notices.  
+4. Keep all redistributed code unmodified or clearly documented.  
+5. Ensure all Control App logic communicates with WebODM via REST API only.
 
-### Monitoring Tasks
+License boundary diagram must be documented in `/docs/compliance.md`.
 
-1. Go to the "Monitor" tab
-2. View task status in real-time
-3. Monitor progress and logs
-4. Download results when complete
+---
 
-## Configuration
+## 6. Operational Policy
 
-### Application Settings
+| Category | Default | Notes |
+|-----------|----------|------|
+| **Network** | Localhost only | LAN exposure requires opt-in and warning |
+| **Data Persistence** | Always preserved | Never auto-deleted on uninstall |
+| **Backups** | Manual + optional scheduled | Stored in `backups/` |
+| **GPU Mode** | Disabled by default | User enables via Settings |
+| **Security** | Least privilege | No exposed Docker TCP socket |
+| **Updates** | Manual check | Auto-update optional for Control App only |
 
-Access settings through the "Settings" tab:
+---
 
-- **Auto-start**: Automatically start containers on app launch
-- **Max Concurrent Tasks**: Maximum number of simultaneous processing tasks
-- **Retry Settings**: Configure retry attempts and delays
-- **Network Settings**: Configure ports for WebODM and NodeODM
-- **Storage Settings**: Set data directory location
+## 7. Build Automation and Deliverables
 
-### Docker Configuration
+Claude-Code must produce:
 
-The application uses Docker Compose for container management:
+1. **Installer Build**
+   - WiX MSI signed with code-signing certificate  
+   - Embedded Control App payload  
+   - Post-install validation script  
 
-```yaml
-# docker-compose.yml
-services:
-  webodm:
-    image: opendronemap/webodm_webapp:latest
-    ports:
-      - "8000:8000"
-  
-  nodeodm:
-    image: opendronemap/nodeodm:latest
-    ports:
-      - "3000:3000"
-```
+2. **Control App Build**
+   - Built with `electron-builder`  
+   - Signed executable  
+   - MSI or EXE payload included in installer  
 
-## Troubleshooting
+3. **Runtime Assets**
+   - Docker Compose manifest (pinned image tags)  
+   - Default config templates  
+   - PowerShell scripts for stack control  
 
-### Container Issues
+4. **Validation Pipeline**
+   - Smoke test VM: verify installation, startup, persistence, GPU check (`nvidia-smi` visible).  
+   - Output:  
+     - `SkyForge-Setup-<version>.msi`  
+     - `SkyForge-Source-<version>.zip` (AGPL compliance archive)  
 
-1. **Containers won't start**:
-   - Check Docker is running
-   - Verify ports 8000 and 3000 are available
-   - Check Docker logs: `docker logs webodm-desktop`
+---
 
-2. **WebODM unhealthy**:
-   - Restart containers from Settings tab
-   - Check disk space (WebODM needs significant storage)
-   - Verify Docker resources (CPU, memory)
+## 8. Roadmap and Milestones
 
-3. **NodeODM connection issues**:
-   - Ensure NodeODM container is running
-   - Check network connectivity
-   - Verify port 3000 is accessible
+| Stage | Goal | Deliverable |
+|--------|------|-------------|
+| **Phase 1** | Functional MSI installer + working Control App | SkyForge v0.9 Beta |
+| **Phase 2** | GPU runtime verification + Lockdown plugin integration | v1.0 Stable |
+| **Phase 3** | Backup scheduler + auto-update | v1.1 |
+| **Phase 4** | Multi-node and plugin extensibility | v1.2 |
+| **Phase 5** | Cloud sync / enterprise deployment | v2.0 |
 
-### Task Processing Issues
+---
 
-1. **Tasks stuck in queue**:
-   - Check NodeODM container health
-   - Verify processing node is online
-   - Check available disk space
+## 9. Definition of Done
 
-2. **Task failures**:
-   - Review task logs in Monitor tab
-   - Check image file formats and sizes
-   - Verify processing options are valid
+A SkyForge release is *complete* when:
+- Installer builds successfully and installs cleanly on a fresh Windows 11 system  
+- Control App starts, controls, and monitors WebODM stack  
+- Data persists across uninstall/reinstall  
+- GPU processing passes validation  
+- Compliance artifacts included and verified  
 
-3. **Slow processing**:
-   - Check system resources (CPU, memory)
-   - Consider reducing concurrent tasks
-   - Verify Docker resource limits
+---
 
-## File Formats
-
-### Supported Image Formats
-
-- JPEG (.jpg, .jpeg)
-- PNG (.png)
-- TIFF (.tiff, .tif)
-- BMP (.bmp)
-- WebP (.webp)
-
-### File Requirements
-
-- Maximum file size: 100MB per image
-- Minimum dimensions: 100x100 pixels
-- GPS data recommended for better georeferencing
-
-## License Compliance
-
-This desktop application maintains AGPL compliance through:
-
-1. **Component Separation**: WebODM and NodeODM run in isolated Docker containers
-2. **API Communication**: Only REST API calls, no code modification
-3. **Clear Boundaries**: Desktop app is a separate work from WebODM/NodeODM
-4. **Documentation**: Architecture clearly documented
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
-
-## Support
-
-For issues and questions:
-
-1. Check the troubleshooting section
-2. Review application logs in `~/.webodm-desktop/logs/`
-3. Check Docker container logs
-4. Create an issue with detailed information
-
-## Roadmap
-
-- [ ] Enhanced result visualization
-- [ ] Batch processing improvements
-- [ ] Advanced processing options
-- [ ] Plugin system for custom workflows
-- [ ] Cloud storage integration
-- [ ] Multi-node processing support
+**End of Specification**
